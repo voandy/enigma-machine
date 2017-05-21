@@ -1,7 +1,8 @@
 from enigma_machine import *
 
-rotors = []
-start_positions = []
+rotor1 = []
+rotor2 = []
+rotor3 = []
 
 rotor_select = 0
 start_pos = 0
@@ -11,21 +12,21 @@ answer = ''
 
 def run_machine():
 	rotor_select = int(input('Select first rotor (1-5): '))
-	rotors.append(rotor_select - 1)
+	rotor1.append(rotor_select - 1)
 	start_pos = int(input('Choose the starting position (1-26): '))
-	start_positions.append(start_pos - 1)
+	rotor1.append(start_pos - 1)
 
 	rotor_select = int(input('\nSelect second rotor (1-5): '))
-	rotors.append(rotor_select - 1)
+	rotor2.append(rotor_select - 1)
 	start_pos = int(input('Choose the starting position (1-26): '))
-	start_positions.append(start_pos - 1)
+	rotor2.append(start_pos - 1)
 
 	rotor_select = int(input('\nSelect second rotor (1-5): '))
-	rotors.append(rotor_select - 1)
+	rotor3.append(rotor_select - 1)
 	start_pos = int(input('Choose the starting position (1-26): '))
-	start_positions.append(start_pos - 1)
+	rotor3.append(start_pos - 1)
 
-	enigma = machine(rotors, start_positions)
+	enigma = machine(rotor1, rotor2, rotor3)
 
 	text = input('\nEnter a message to encrypt/decrypt '\
 	'(no spaces or punctuation): ')

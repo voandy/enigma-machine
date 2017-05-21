@@ -72,11 +72,11 @@ class machine:
 	rotor_middle = None
 	rotor_left = None
 
-	def __init__(self, rotors, start_positions):
+	def __init__(self, rotor1, rotor2, rotor3):
 
-		self.rotor_right = rotor(rotors[2], start_positions[2])
-		self.rotor_middle = rotor(rotors[1], start_positions[1])
-		self.rotor_left = rotor(rotors[0], start_positions[0])
+		self.rotor_right = rotor(rotor1[0], rotor1[1])
+		self.rotor_middle = rotor(rotor2[0], rotor2[1])
+		self.rotor_left = rotor(rotor2[0], rotor2[1])
 
 	def encode_message(self, text):
 		# converts message to list of ints
