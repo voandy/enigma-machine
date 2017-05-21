@@ -49,7 +49,7 @@ class rotor:
 		return self.index_curr.index(self.rotor_curr[num])
 
 	# rotates entire rotor by 1 and returns true of the index has reached
-	# the turnover pos
+	# the turnover position
 	def rotate(self):
 		self.rotor_curr = self.rotor_curr[1:] + self.rotor_curr[:1]
 		self.index_curr = self.index_curr[1:] + self.index_curr[:1]
@@ -72,11 +72,11 @@ class machine:
 	rotor_middle = None
 	rotor_left = None
 
-	def __init__(self, rotor1, rotor2, rotor3):
+	def __init__(self, rotor_r, rotor_m, rotor_l):
 
-		self.rotor_right = rotor(rotor1[0], rotor1[1])
-		self.rotor_middle = rotor(rotor2[0], rotor2[1])
-		self.rotor_left = rotor(rotor2[0], rotor2[1])
+		self.rotor_right = rotor(rotor_r[0], rotor_r[1])
+		self.rotor_middle = rotor(rotor_m[0], rotor_m[1])
+		self.rotor_left = rotor(rotor_l[0], rotor_l[1])
 
 	def encode_message(self, text):
 		# converts message to list of ints
