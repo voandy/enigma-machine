@@ -15,3 +15,4 @@ print(rotor_right.index_curr)
 print("\n")
 
 print(rotor_right.encrypt(0))
+print(rotor_right.encrypt_reverse(0))
