@@ -12,13 +12,13 @@ with open('wiring.csv') as wiring:
 	data = csv.reader(wiring)
 	
 	next(data) # skips header
-	rotor_index = map(int,next(data))
+	rotor_index = list(map(int,next(data)))
 
 	next(data)
-	rotor_wiring = [map(int,next(data)) for i in range(5)]
+	rotor_wiring = [list(map(int,next(data))) for i in range(5)]
 
 	next(data)
-	reflector_wiring = map(int,next(data))
+	reflector_wiring = list(map(int,next(data)))
 
 class plug_board:
 	pass
@@ -85,6 +85,7 @@ class machine:
 		encoded_list = []
 		encoded_message = ''
 
+		# encrypts each num
 		for num in message:
 			num = self.encrypt_num(num)
 			encoded_list.append(num)
@@ -94,7 +95,7 @@ class machine:
 				if self.rotor_middle.rotate():
 					self.rotor_left.rotate()
 
-		# converts list of encoded list back to string
+		# converts encoded list back to string
 		for num in encoded_list:
 			encoded_message = encoded_message + convert_num(num)
 
