@@ -5,4 +5,4 @@ Like most computer science students I am a big fan of Alan Turing both for his r
 
 Out of curiosity I started studying the inner workings of the Enigma machine and got to asking how fast would it take a modern day computer to crack the Enigma code? It would probably take a fraction of a second using Alan Turing's methods but would a blind brute-force attack work in a reasonable amout of time given enough computing power?
 
-To answer this question I first had to program a working Enigma machine.
+To answer this question I first had to program this working Enigma machine simulator.
