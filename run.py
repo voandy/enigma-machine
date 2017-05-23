@@ -26,7 +26,7 @@ def run_machine():
 	start_pos = int(input('Choose the starting position (1-26): '))
 	rotor_l.append(start_pos - 1)
 
-	enigma = machine(rotor_r, rotor_m, rotor_l)
+	enigma = enigma_machine(rotor_r, rotor_m, rotor_l)
 
 	text = input('\nEnter a message to encrypt/decrypt '\
 	'(no spaces or punctuation): ')

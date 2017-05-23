@@ -1,18 +1,14 @@
 from string import ascii_uppercase as uper
 import csv
 
-# declare and import setting for the rotors and reflector
-rotor_index = []
 rotor_wiring = []
 reflector_wiring = []
 letter_dict = {letter:i for i, letter in enumerate(uper)}
 number_dict = {i:letter for i, letter in enumerate(uper)}
 
+# import setting for the rotors and reflector
 with open('wiring.csv') as wiring:
 	data = csv.reader(wiring)
-	
-	next(data) # skips header
-	rotor_index = list(map(int,next(data)))
 
 	next(data)
 	rotor_wiring = [list(map(int,next(data))) for i in range(5)]
@@ -25,9 +21,9 @@ class plug_board:
 
 class rotor:
 	rotor_start = []
-	rotor_curr = []
-	index_curr = []
 	turnover_pos = 0
+	offset = []
+	offset_rev = []
 
 	def __init__(self, rotor_no, start_pos):
 		# The first 26 numbers in rotor_wiring represent the wiring while 
@@ -35,28 +31,35 @@ class rotor:
 		self.rotor_start = rotor_wiring[rotor_no][:26]
 		self.turnover_pos = rotor_wiring[rotor_no][26]
 
-		# rotor and index rotated to reflect starting position
-		self.rotor_curr = self.rotor_start[start_pos:] + \
-			self.rotor_start[:start_pos]
-		self.index_curr = rotor_index[start_pos:] + rotor_index[:start_pos]
+		# set rotor offset for right to left encryption
+		self.offset = [(self.rotor_start.index(i) - i) % 26 for i in range(26)]
 
-	# encrypts a single character in the left direction
-	def encrypt_left(self, num):
-		return self.rotor_curr.index(self.index_curr[num])
+		# set rotor offset for left to right encryption
+		self.offset_rev = [(self.rotor_start[i] - i) % 26 for i in range(26)]
 
-	# encrypts a single character in the right direction
-	def encrypt_right(self, num):
-		return self.index_curr.index(self.rotor_curr[num])
+		# offset turnover position
+		self.turnover_pos = self.offset[self.turnover_pos]
 
-	# rotates entire rotor by 1 and returns true of the index has reached
-	# the turnover position
+		# rotor rotated to reflect starting position
+		self.offset = self.offset[start_pos:] + self.offset[:start_pos]
+		self.offset_rev = self.offset_rev[start_pos:] + \
+			self.offset_rev[:start_pos]
+
+	# encrypts a single character right to left
+	def encrypt(self, num):
+		return (num + self.offset[num]) % 26
+
+	# encrypts a single character left to right
+	def encrypt_rev(self, num):
+		return (num + self.offset_rev[num]) % 26
+
 	def rotate(self):
-		self.rotor_curr = self.rotor_curr[1:] + self.rotor_curr[:1]
-		self.index_curr = self.index_curr[1:] + self.index_curr[:1]
-		if self.index_curr[0] == self.turnover_pos:
-			return True
-		else:
-			return False
+		# rotates entire rotor by 1
+		self.offset = self.offset[1:] + self.offset[:1]
+		self.offset_rev = self.offset_rev[1:] + self.offset_rev[:1]
+
+		# returns true of the index has reached the turnover position
+		return self.offset[0] == self.turnover_pos
 
 def reflect(num):
 	return reflector_wiring[num]
@@ -67,13 +70,12 @@ def convert_char(char):
 def convert_num(num):
 	return number_dict[num]
 
-class machine:
+class enigma_machine:
 	rotor_right = None
 	rotor_middle = None
 	rotor_left = None
 
 	def __init__(self, rotor_r, rotor_m, rotor_l):
-
 		self.rotor_right = rotor(rotor_r[0], rotor_r[1])
 		self.rotor_middle = rotor(rotor_m[0], rotor_m[1])
 		self.rotor_left = rotor(rotor_l[0], rotor_l[1])
@@ -103,16 +105,16 @@ class machine:
 
 	def encrypt_num(self, num):
 		# first pass through the rotors
-		num = self.rotor_right.encrypt_left(num)
-		num = self.rotor_middle.encrypt_left(num)
-		num = self.rotor_left.encrypt_left(num)
+		num = self.rotor_right.encrypt(num)
+		num = self.rotor_middle.encrypt(num)
+		num = self.rotor_left.encrypt(num)
 
 		# bounce off reflector
 		num = reflect(num)
 	
 		#second pass through the rotors
-		num = self.rotor_left.encrypt_right(num)
-		num = self.rotor_middle.encrypt_right(num)
-		num = self.rotor_right.encrypt_right(num)
+		num = self.rotor_left.encrypt_rev(num)
+		num = self.rotor_middle.encrypt_rev(num)
+		num = self.rotor_right.encrypt_rev(num)
 
 		return num
