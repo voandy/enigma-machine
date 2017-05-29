@@ -36,16 +36,8 @@ class rotor:
 	offset_rev = []
 
 	def __init__(self, rotor_no, start_pos, ring_setting = 0):
-		# The first 26 numbers in rotor_wiring represent the wiring while 
-		# the 27th number indicates its turnover position
-		self.rotor_start = rotor_wiring[rotor_no][:26]
-		self.turnover_pos = rotor_wiring[rotor_no][26]
-
-		# offset rotor's start position by the ring setting, similar effect
-		# to rotating rotor but also offsets turnover position
-		if ring_setting:
-			self.rotor_start = self.rotor_start[ring_setting:] + \
-				self.rotor_start[:ring_setting]
+		self.rotor_start = rotor_wiring[rotor_no]
+		self.turnover_pos = ring_setting
 
 		# set rotor offset for right to left encryption
 		self.offset = [(self.rotor_start.index(i) - i) % 26 for i in range(26)]
